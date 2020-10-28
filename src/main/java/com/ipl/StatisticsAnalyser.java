@@ -80,6 +80,10 @@ public class StatisticsAnalyser {
 		bowlingStatsList.removeIf(stat -> stat.strikeRate == 0);
 		return this.sort(bowlingStatsList, statComparator);
 	}
+	public <E>List getBestBowlingEconomy() throws StatisticsAnalyserException {
+		Comparator<BowlingCSV> statComparator = Comparator.comparing(stat -> (stat.economy) );
+		return this.sort(bowlingStatsList, statComparator);
+	}
 	private <E> List sort(List<E> statList, Comparator<E> statComparator) throws StatisticsAnalyserException {
 		if(statList == null || statList.size() == 0) {
 			throw new StatisticsAnalyserException("No Census Data", StatisticsAnalyserException.ExceptionType.NO_STATISTICS_DATA);
