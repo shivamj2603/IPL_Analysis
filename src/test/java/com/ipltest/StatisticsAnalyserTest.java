@@ -131,5 +131,13 @@ public class StatisticsAnalyserTest {
 		List<BowlingCSV> sortedByMaximumWicketsAndBestAverage = analyser.getMaximumWicketsWithBestAverage();
 		assertEquals("Kagiso Rabada", sortedByMaximumWicketsAndBestAverage.get(0).playerName);
 		}
-	
+	@Test
+	public void givenStatistics_WhenSortedByBowlingAndBattingAverage_ShouldReturnSortedResult()
+			throws IOException, StatisticsAnalyserException, CSVBuilderException {
+		StatisticsAnalyser analyser = new StatisticsAnalyser();
+		analyser.loadBowlingStatsData(BOWLING_STATISTICS_CSVFILE);
+		analyser.loadBattingStatsData(BATTING_STATISTICS_CSVFILE);
+		List average = analyser.getBestBattingAndBowlingAverage();
+        assertEquals("Andre Russell", average.get(0));
+		}
 }
