@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import com.google.gson.Gson;
@@ -52,6 +53,11 @@ public class StatisticsAnalyser {
 	public <E>List getMostBoundaries() throws StatisticsAnalyserException {
 		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.noOfFours + stat.noOfSixes) );
 		return this.sort(battingStatsList, statComparator.reversed());
+	}
+	public <E>List getBestStrikeRateWithBoundaries() throws StatisticsAnalyserException {
+		battingStatsList.removeIf(s->(s.noOfFours+s.noOfSixes)==0);
+		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.bF / (stat.noOfFours + stat.noOfSixes)));
+		return this.sort(battingStatsList,  statComparator);
 	}
 	private <E> List sort(List<E> statList, Comparator<E> statComparator) throws StatisticsAnalyserException {
 		if(statList == null || statList.size() == 0) {
