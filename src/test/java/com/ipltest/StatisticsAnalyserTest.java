@@ -40,7 +40,15 @@ public class StatisticsAnalyserTest {
 			throws IOException, StatisticsAnalyserException, CSVBuilderException {
 		StatisticsAnalyser analyser = new StatisticsAnalyser();
 		analyser.loadBattingStatsData(BATTING_STATISTICS_CSVFILE);
-		List<BattingCSV> sortedCensusData = analyser.getBestBattingAverage();
-		assertEquals("MS Dhoni", sortedCensusData.get(0).playerName);
+		List<BattingCSV> sortedByAverage = analyser.getBestBattingAverage();
+		assertEquals("MS Dhoni", sortedByAverage.get(0).playerName);
+		}
+	@Test
+	public void givenBattingStatistics_WhenSortedByStrikeRate_ShouldReturnSortedResult()
+			throws IOException, StatisticsAnalyserException, CSVBuilderException {
+		StatisticsAnalyser analyser = new StatisticsAnalyser();
+		analyser.loadBattingStatsData(BATTING_STATISTICS_CSVFILE);
+		List<BattingCSV> sortedByStrikeRate = analyser.getBestStrikeRate();
+		assertEquals("Ishant Sharma", sortedByStrikeRate.get(0).playerName);
 		}
 }
