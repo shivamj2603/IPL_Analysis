@@ -3,6 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
 import com.ipl.BattingCSV;
+import com.ipl.BowlingCSV;
 import com.ipl.StatisticsAnalyser;
 import com.ipl.StatisticsAnalyserException;
 import java.util.List;
@@ -82,5 +83,13 @@ public class StatisticsAnalyserTest {
 		List<BattingCSV> sortedByMaximumRunsAndBestAverage = analyser.getMaximumRunsWithBestAverage();
 		sortedByMaximumRunsAndBestAverage.forEach(s->System.out.println(s.playerName));
 		assertEquals("MS Dhoni", sortedByMaximumRunsAndBestAverage.get(0).playerName);
+		}
+	@Test
+	public void givenBowlingStatistics_WhenSortedByAverage_ShouldReturnSortedResult()
+			throws IOException, StatisticsAnalyserException, CSVBuilderException {
+		StatisticsAnalyser analyser = new StatisticsAnalyser();
+		analyser.loadBowlingStatsData(BOWLING_STATISTICS_CSVFILE);
+		List<BowlingCSV> sortedByAverage = analyser.getBestBowlingAverage();
+		assertEquals("Anukul Roy", sortedByAverage.get(0).playerName);
 		}
 }

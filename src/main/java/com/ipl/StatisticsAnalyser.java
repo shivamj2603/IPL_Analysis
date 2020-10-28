@@ -70,6 +70,11 @@ public class StatisticsAnalyser {
 		List<BattingCSV> maximumRuns = this.sort(battingStatsList, statComparator.reversed());
 		return this.sort(maximumRuns.stream().limit(20).collect(Collectors.toList()), statAvgComparator.reversed());
 	}
+	public <E>List getBestBowlingAverage() throws StatisticsAnalyserException {
+		Comparator<BowlingCSV> statComparator = Comparator.comparing(stat -> (stat.avg) );
+		bowlingStatsList.removeIf(stat -> stat.avg == 0);
+		return this.sort(bowlingStatsList, statComparator);
+	}
 	private <E> List sort(List<E> statList, Comparator<E> statComparator) throws StatisticsAnalyserException {
 		if(statList == null || statList.size() == 0) {
 			throw new StatisticsAnalyserException("No Census Data", StatisticsAnalyserException.ExceptionType.NO_STATISTICS_DATA);
