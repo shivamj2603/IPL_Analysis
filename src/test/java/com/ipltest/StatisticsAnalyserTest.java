@@ -81,7 +81,6 @@ public class StatisticsAnalyserTest {
 		StatisticsAnalyser analyser = new StatisticsAnalyser();
 		analyser.loadBattingStatsData(BATTING_STATISTICS_CSVFILE);
 		List<BattingCSV> sortedByMaximumRunsAndBestAverage = analyser.getMaximumRunsWithBestAverage();
-		sortedByMaximumRunsAndBestAverage.forEach(s->System.out.println(s.playerName));
 		assertEquals("MS Dhoni", sortedByMaximumRunsAndBestAverage.get(0).playerName);
 		}
 	@Test
@@ -107,5 +106,13 @@ public class StatisticsAnalyserTest {
 		analyser.loadBowlingStatsData(BOWLING_STATISTICS_CSVFILE);
 		List<BowlingCSV> sortedByEconomy = analyser.getBestBowlingEconomy();
 		assertEquals("Shivam Dube", sortedByEconomy.get(0).playerName);
+		}
+	@Test
+	public void givenBowlingStatistics_WhenSortedByStrikeRateAndHauls_ShouldReturnSortedResult()
+			throws IOException, StatisticsAnalyserException, CSVBuilderException {
+		StatisticsAnalyser analyser = new StatisticsAnalyser();
+		analyser.loadBowlingStatsData(BOWLING_STATISTICS_CSVFILE);
+		List<BowlingCSV> sortedByStrikeRateAndHauls = analyser.getBestBowlingStrikeRateWithHauls();
+		assertEquals("Alzarri Joseph", sortedByStrikeRateAndHauls.get(0).playerName);
 		}
 }
