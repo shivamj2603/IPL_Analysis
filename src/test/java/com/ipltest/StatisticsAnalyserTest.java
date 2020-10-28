@@ -92,4 +92,12 @@ public class StatisticsAnalyserTest {
 		List<BowlingCSV> sortedByAverage = analyser.getBestBowlingAverage();
 		assertEquals("Anukul Roy", sortedByAverage.get(0).playerName);
 		}
+	@Test
+	public void givenBowlingStatistics_WhenSortedByStrikeRate_ShouldReturnSortedResult()
+			throws IOException, StatisticsAnalyserException, CSVBuilderException {
+		StatisticsAnalyser analyser = new StatisticsAnalyser();
+		analyser.loadBowlingStatsData(BOWLING_STATISTICS_CSVFILE);
+		List<BowlingCSV> sortedByStrikeRate = analyser.getBestBowlingStrikeRate();
+		assertEquals("Alzarri Joseph", sortedByStrikeRate.get(0).playerName);
+		}
 }
