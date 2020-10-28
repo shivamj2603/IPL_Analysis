@@ -118,13 +118,6 @@ public class StatisticsAnalyser {
 		}
 		return stat;
 	}
-	public <E>List getMaximumHundredsWithBestAverage() throws StatisticsAnalyserException {
-		battingStatsList.removeIf(stat -> stat.noOfHundreds==0);
-		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.noOfHundreds) );
-		Comparator<BattingCSV> statAvgComparator = Comparator.comparing(stat -> (stat.avg) );
-		List<BattingCSV> maximumHundreds = this.sort(battingStatsList, statComparator.reversed());
-		return this.sort(maximumHundreds, statAvgComparator.reversed());
-	}
 	public <E>List getAllRounder() throws StatisticsAnalyserException {
 		List<String> stats = new ArrayList<String>();
 		Comparator<BowlingCSV> statBowlComparator = Comparator.comparing(stat -> (stat.wickets));
@@ -141,6 +134,18 @@ public class StatisticsAnalyser {
 			}
 		}
 		return stats;
+	}
+	public <E>List getMaximumHundredsWithBestAverage() throws StatisticsAnalyserException {
+		battingStatsList.removeIf(stat -> stat.noOfHundreds==0);
+		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.noOfHundreds) );
+		Comparator<BattingCSV> statAvgComparator = Comparator.comparing(stat -> (stat.avg) );
+		List<BattingCSV> maximumHundreds = this.sort(battingStatsList, statComparator.reversed());
+		return this.sort(maximumHundreds, statAvgComparator.reversed());
+	}
+	public <E>List getBestAverageWithoutHundredsOrFifties() throws StatisticsAnalyserException {
+		battingStatsList.removeIf(stat -> (stat.noOfHundreds !=0 || stat.noOfFifties != 0));
+		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.avg) );
+		return this.sort(battingStatsList, statComparator.reversed());
 	}
 	private <E> List sort(List<E> statList, Comparator<E> statComparator) throws StatisticsAnalyserException {
 		if(statList == null || statList.size() == 0) {
