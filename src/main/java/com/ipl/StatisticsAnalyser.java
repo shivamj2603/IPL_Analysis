@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import com.google.gson.Gson;
+import java.util.stream.Collectors;
 import CSVBuilder.CSVBuilderException;
 import CSVBuilder.CSVBuilderFactory;
 import CSVBuilder.ICSVBuilder;
@@ -58,6 +58,11 @@ public class StatisticsAnalyser {
 		battingStatsList.removeIf(s->(s.noOfFours+s.noOfSixes)==0);
 		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.bF / (stat.noOfFours + stat.noOfSixes)));
 		return this.sort(battingStatsList,  statComparator);
+	}
+	public <E>List getBestAverageAndStrikeRate() throws StatisticsAnalyserException {
+		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.avg) );
+		List<BattingCSV> strikeRate = this.sort(battingStatsList, statComparator.reversed());
+		return this.sort(strikeRate.stream().limit(20).collect(Collectors.toList()), statComparator.reversed());
 	}
 	private <E> List sort(List<E> statList, Comparator<E> statComparator) throws StatisticsAnalyserException {
 		if(statList == null || statList.size() == 0) {
