@@ -115,4 +115,13 @@ public class StatisticsAnalyserTest {
 		List<BowlingCSV> sortedByStrikeRateAndHauls = analyser.getBestBowlingStrikeRateWithHauls();
 		assertEquals("Alzarri Joseph", sortedByStrikeRateAndHauls.get(0).playerName);
 		}
+	@Test
+	public void givenBowlingStatistics_WhenSortedByBestAverageWithBestStrikeRate_ShouldReturnSortedResult()
+			throws IOException, StatisticsAnalyserException, CSVBuilderException {
+		StatisticsAnalyser analyser = new StatisticsAnalyser();
+		analyser.loadBowlingStatsData(BOWLING_STATISTICS_CSVFILE);
+		List<BowlingCSV> sortedByStrikeRateAndBestAverage = analyser.getBestBowlingAverageAndStrikeRate();
+		assertEquals("Alzarri Joseph", sortedByStrikeRateAndBestAverage.get(0).playerName);
+		}
+	
 }
