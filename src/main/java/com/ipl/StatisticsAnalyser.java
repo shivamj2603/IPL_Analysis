@@ -116,8 +116,26 @@ public class StatisticsAnalyser {
 				}
 			}
 		}
-		System.out.println(stat);
 		return stat;
+	}
+	public <E>List getAllRounder() throws StatisticsAnalyserException {
+		
+		List<String> stats = new ArrayList<String>();
+		Comparator<BowlingCSV> statBowlComparator = Comparator.comparing(stat -> (stat.wickets));
+		Comparator<BattingCSV> statBatComparator = Comparator.comparing(stat -> (stat.runs));
+		List<BattingCSV> battingAverage = this.sort(battingStatsList, statBatComparator);
+		battingAverage = battingAverage.stream().limit(50).collect(Collectors.toList());
+		List<BowlingCSV> bowlingAverage = this.sort(bowlingStatsList, statBowlComparator);
+		bowlingAverage = bowlingAverage.stream().limit(50).collect(Collectors.toList());
+		for(BattingCSV b: battingAverage ) {
+			for(int i = 0;i < bowlingAverage.size(); i++) {
+				if(b.playerName.equals(bowlingAverage.get(i).playerName)) {
+					stats.add(b.playerName);
+				}
+			}
+		}
+		System.out.println(stats);
+		return stats;
 	}
 	private <E> List sort(List<E> statList, Comparator<E> statComparator) throws StatisticsAnalyserException {
 		if(statList == null || statList.size() == 0) {
