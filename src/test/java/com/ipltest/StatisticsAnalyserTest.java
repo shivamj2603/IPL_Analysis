@@ -140,4 +140,13 @@ public class StatisticsAnalyserTest {
 		List average = analyser.getBestBattingAndBowlingAverage();
         assertEquals("Andre Russell", average.get(0));
 		}
+	@Test
+	public void givenStatistics_WhenSortedByMaximumRunsAndWickets_ShouldReturnSortedResult()
+			throws IOException, StatisticsAnalyserException, CSVBuilderException {
+		StatisticsAnalyser analyser = new StatisticsAnalyser();
+		analyser.loadBowlingStatsData(BOWLING_STATISTICS_CSVFILE);
+		analyser.loadBattingStatsData(BATTING_STATISTICS_CSVFILE);
+		List average = analyser.getAllRounder();
+        assertEquals("Shakib Al Hasan", average.get(0));
+		}
 }
