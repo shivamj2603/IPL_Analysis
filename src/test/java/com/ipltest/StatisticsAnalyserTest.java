@@ -157,4 +157,12 @@ public class StatisticsAnalyserTest {
 		List<BattingCSV> sortedByMaximumHundredsAndBestAverage = analyser.getMaximumHundredsWithBestAverage();
 		assertEquals("David Warner ", sortedByMaximumHundredsAndBestAverage.get(0).playerName);
 		}
+	@Test
+	public void givenBattingStatistics_WhenSortedByBestBattingAverageWithoutHundredsOrFifties_ShouldReturnSortedResult()
+			throws IOException, StatisticsAnalyserException, CSVBuilderException {
+		StatisticsAnalyser analyser = new StatisticsAnalyser();
+		analyser.loadBattingStatsData(BATTING_STATISTICS_CSVFILE);
+		List<BattingCSV> sortedByBestAverageWithoutHundredsFifties = analyser.getBestAverageWithoutHundredsOrFifties();
+		assertEquals("Marcus Stoinis", sortedByBestAverageWithoutHundredsFifties.get(0).playerName);
+		}
 }
