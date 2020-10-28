@@ -6,6 +6,8 @@ import com.google.gson.Gson;
 import com.ipl.BattingCSV;
 import com.ipl.StatisticsAnalyser;
 import com.ipl.StatisticsAnalyserException;
+import java.util.List;
+
 import CSVBuilder.CSVBuilderException;
 
 public class StatisticsAnalyserTest {
@@ -33,4 +35,12 @@ public class StatisticsAnalyserTest {
 		}
 		assertEquals(99, count);
 	}
+	@Test
+	public void givenBattingStatistics_WhenSortedByAverage_ShouldReturnSortedResult()
+			throws IOException, StatisticsAnalyserException, CSVBuilderException {
+		StatisticsAnalyser analyser = new StatisticsAnalyser();
+		analyser.loadBattingStatsData(BATTING_STATISTICS_CSVFILE);
+		List<BattingCSV> sortedCensusData = analyser.getBestBattingAverage();
+		assertEquals("MS Dhoni", sortedCensusData.get(0).playerName);
+		}
 }
