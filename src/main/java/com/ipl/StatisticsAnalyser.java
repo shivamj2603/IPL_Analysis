@@ -3,9 +3,12 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import CSVBuilder.CSVBuilderException;
 import CSVBuilder.CSVBuilderFactory;
@@ -99,6 +102,22 @@ public class StatisticsAnalyser {
 		Comparator<BowlingCSV> statAvgComparator = Comparator.comparing(stat -> (stat.avg) );
 		List<BowlingCSV> maximumWickets = this.sort(bowlingStatsList, statComparator.reversed());
 		return this.sort(maximumWickets.stream().limit(20).collect(Collectors.toList()), statAvgComparator);
+	}
+	public <E>List getBestBattingAndBowlingAverage() throws StatisticsAnalyserException {
+		List<String> stat = new ArrayList<String>();
+		List<BattingCSV> battingAverage = getBestBattingAverage();
+		battingAverage = battingAverage.stream().limit(50).collect(Collectors.toList());
+		List<BowlingCSV> bowlingAverage = getBestBowlingAverage();
+		bowlingAverage = bowlingAverage.stream().limit(50).collect(Collectors.toList());
+		for(BattingCSV b: battingAverage ) {
+			for(int i = 0;i < bowlingAverage.size(); i++) {
+				if(b.playerName.equals(bowlingAverage.get(i).playerName)) {
+					stat.add(b.playerName);
+				}
+			}
+		}
+		System.out.println(stat);
+		return stat;
 	}
 	private <E> List sort(List<E> statList, Comparator<E> statComparator) throws StatisticsAnalyserException {
 		if(statList == null || statList.size() == 0) {
