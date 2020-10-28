@@ -60,10 +60,15 @@ public class StatisticsAnalyser {
 		return this.sort(battingStatsList,  statComparator);
 	}
 	public <E>List getBestAverageAndStrikeRate() throws StatisticsAnalyserException {
-		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.avg) );
-		List<BattingCSV> strikeRate = this.sort(battingStatsList, statComparator.reversed());
+		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.strikeRate) );
+		List<BattingCSV> strikeRate = getBestBattingAverage();
 		return this.sort(strikeRate.stream().limit(20).collect(Collectors.toList()), statComparator.reversed());
 	}
+//	public <E>List getMaximumRunsWithBestAverage() throws StatisticsAnalyserException {
+//		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.runs) );
+//		List<BattingCSV> strikeRate = 
+//		return this.sort(strikeRate.stream().limit(20).collect(Collectors.toList()), statComparator.reversed());
+//	}
 	private <E> List sort(List<E> statList, Comparator<E> statComparator) throws StatisticsAnalyserException {
 		if(statList == null || statList.size() == 0) {
 			throw new StatisticsAnalyserException("No Census Data", StatisticsAnalyserException.ExceptionType.NO_STATISTICS_DATA);

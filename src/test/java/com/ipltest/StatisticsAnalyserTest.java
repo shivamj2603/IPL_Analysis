@@ -72,6 +72,6 @@ public class StatisticsAnalyserTest {
 		StatisticsAnalyser analyser = new StatisticsAnalyser();
 		analyser.loadBattingStatsData(BATTING_STATISTICS_CSVFILE);
 		List<BattingCSV> sortedByStrikeRateAndBestAverage = analyser.getBestAverageAndStrikeRate();
-		assertEquals("MS Dhoni", sortedByStrikeRateAndBestAverage.get(0).playerName);
+		assertEquals("Andre Russell", sortedByStrikeRateAndBestAverage.get(0).playerName);
 		}
 }
