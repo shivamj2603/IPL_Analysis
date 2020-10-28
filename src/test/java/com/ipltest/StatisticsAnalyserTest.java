@@ -74,4 +74,13 @@ public class StatisticsAnalyserTest {
 		List<BattingCSV> sortedByStrikeRateAndBestAverage = analyser.getBestAverageAndStrikeRate();
 		assertEquals("Andre Russell", sortedByStrikeRateAndBestAverage.get(0).playerName);
 		}
+	@Test
+	public void givenBattingStatistics_WhenSortedByMaximumRunsAndBestBattingAverage_ShouldReturnSortedResult()
+			throws IOException, StatisticsAnalyserException, CSVBuilderException {
+		StatisticsAnalyser analyser = new StatisticsAnalyser();
+		analyser.loadBattingStatsData(BATTING_STATISTICS_CSVFILE);
+		List<BattingCSV> sortedByMaximumRunsAndBestAverage = analyser.getMaximumRunsWithBestAverage();
+		sortedByMaximumRunsAndBestAverage.forEach(s->System.out.println(s.playerName));
+		assertEquals("MS Dhoni", sortedByMaximumRunsAndBestAverage.get(0).playerName);
+		}
 }
