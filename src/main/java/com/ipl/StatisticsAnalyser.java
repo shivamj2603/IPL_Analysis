@@ -45,6 +45,10 @@ public class StatisticsAnalyser {
 		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.avg) );
 		return this.sort(battingStatsList, statComparator.reversed());
 	}
+	public <E>List getBestStrikeRate() throws StatisticsAnalyserException {
+		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.strikeRate) );
+		return this.sort(battingStatsList, statComparator.reversed());
+	}
 	private <E> List sort(List<E> statList, Comparator<E> statComparator) throws StatisticsAnalyserException {
 		if(statList == null || statList.size() == 0) {
 			throw new StatisticsAnalyserException("No Census Data", StatisticsAnalyserException.ExceptionType.NO_STATISTICS_DATA);
