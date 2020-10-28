@@ -41,4 +41,24 @@ public class StatisticsAnalyser {
 			throw new StatisticsAnalyserException(exception.getMessage(), StatisticsAnalyserException.ExceptionType.INCORRECT_FILE);
 		}
 	}
+	public <E>List getBestBattingAverage() throws StatisticsAnalyserException {
+		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.avg) );
+		return this.sort(battingStatsList, statComparator.reversed());
+	}
+	private <E> List sort(List<E> statList, Comparator<E> statComparator) throws StatisticsAnalyserException {
+		if(statList == null || statList.size() == 0) {
+			throw new StatisticsAnalyserException("No Census Data", StatisticsAnalyserException.ExceptionType.NO_STATISTICS_DATA);
+		}
+		for (int i = 0; i < statList.size(); i++) {
+			for (int j = 0; j < statList.size() - i - 1; j++) {
+				E stat1 =  statList.get(j);
+				E stat2 =  statList.get(j + 1);
+				if (statComparator.compare(stat1, stat2) > 0) {
+					statList.set(j, stat2);
+					statList.set(j + 1, stat1);
+				}
+			}
+		}
+		return statList;
+	}
 }
