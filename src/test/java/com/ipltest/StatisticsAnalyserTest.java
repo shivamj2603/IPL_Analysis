@@ -100,4 +100,12 @@ public class StatisticsAnalyserTest {
 		List<BowlingCSV> sortedByStrikeRate = analyser.getBestBowlingStrikeRate();
 		assertEquals("Alzarri Joseph", sortedByStrikeRate.get(0).playerName);
 		}
+	@Test
+	public void givenBowlingStatistics_WhenSortedByEconomy_ShouldReturnSortedResult()
+			throws IOException, StatisticsAnalyserException, CSVBuilderException {
+		StatisticsAnalyser analyser = new StatisticsAnalyser();
+		analyser.loadBowlingStatsData(BOWLING_STATISTICS_CSVFILE);
+		List<BowlingCSV> sortedByEconomy = analyser.getBestBowlingEconomy();
+		assertEquals("Shivam Dube", sortedByEconomy.get(0).playerName);
+		}
 }
