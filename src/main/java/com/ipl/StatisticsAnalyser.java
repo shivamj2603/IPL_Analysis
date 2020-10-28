@@ -94,6 +94,12 @@ public class StatisticsAnalyser {
 		List<BowlingCSV> strikeRate = getBestBowlingAverage();
 		return this.sort(strikeRate.stream().limit(20).collect(Collectors.toList()), statComparator);
 	}
+	public <E>List getMaximumWicketsWithBestAverage() throws StatisticsAnalyserException {
+		Comparator<BowlingCSV> statComparator = Comparator.comparing(stat -> (stat.wickets) );
+		Comparator<BowlingCSV> statAvgComparator = Comparator.comparing(stat -> (stat.avg) );
+		List<BowlingCSV> maximumWickets = this.sort(bowlingStatsList, statComparator.reversed());
+		return this.sort(maximumWickets.stream().limit(20).collect(Collectors.toList()), statAvgComparator);
+	}
 	private <E> List sort(List<E> statList, Comparator<E> statComparator) throws StatisticsAnalyserException {
 		if(statList == null || statList.size() == 0) {
 			throw new StatisticsAnalyserException("No Census Data", StatisticsAnalyserException.ExceptionType.NO_STATISTICS_DATA);
