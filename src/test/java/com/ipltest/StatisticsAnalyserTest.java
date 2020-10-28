@@ -1,6 +1,8 @@
 package com.ipltest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.IOException;
+
+import org.checkerframework.checker.units.qual.s;
 import org.junit.jupiter.api.Test;
 import com.google.gson.Gson;
 import com.ipl.BattingCSV;
@@ -58,5 +60,17 @@ public class StatisticsAnalyserTest {
 		analyser.loadBattingStatsData(BATTING_STATISTICS_CSVFILE);
 		List<BattingCSV> sortedByBoundaries = analyser.getMostBoundaries();
 		assertEquals("Andre Russell", sortedByBoundaries.get(0).playerName);
+		}
+	@Test
+	public void givenBattingStatistics_WhenSortedByBestStrikeRatesWithBoundaries_ShouldReturnSortedResult()
+			throws IOException, StatisticsAnalyserException, CSVBuilderException {
+		StatisticsAnalyser analyser = new StatisticsAnalyser();
+		analyser.loadBattingStatsData(BATTING_STATISTICS_CSVFILE);
+		List<BattingCSV> sortedByStrikeRateAndBoundaries = analyser.getBestStrikeRateWithBoundaries();
+		for(BattingCSV s: sortedByStrikeRateAndBoundaries)
+		{
+			System.out.println(s.playerName);
+		}
+		assertEquals("Ishant Sharma", sortedByStrikeRateAndBoundaries.get(0).playerName);
 		}
 }
