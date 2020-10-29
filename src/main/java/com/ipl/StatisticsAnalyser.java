@@ -17,6 +17,19 @@ import CSVBuilder.ICSVBuilder;
 public class StatisticsAnalyser {
 	List<BattingCSV> battingStatsList = null;
 	List<BowlingCSV> bowlingStatsList = null;
+	private static final Comparator<BattingCSV> battingAverageComparator = Comparator.comparing(stat -> (stat.avg));
+	private static final Comparator<BowlingCSV> bowlingAverageComparator = Comparator.comparing(stat -> (stat.avg));
+	private static final Comparator<BattingCSV> battingStrikeRateComparator = Comparator.comparing(stat -> (stat.strikeRate));
+	private static final Comparator<BowlingCSV> bowlingStrikeRateComparator = Comparator.comparing(stat -> (stat.strikeRate));
+	private static final Comparator<BattingCSV> maximumRunsComparator = Comparator.comparing(stat -> (stat.runs));
+	private static final Comparator<BowlingCSV> maximumWicketsComparator = Comparator.comparing(stat -> (stat.wickets) );
+	/**
+	 * Load Batting Statistics
+	 * @param csvFile
+	 * @return
+	 * @throws StatisticsAnalyserException
+	 * @throws IOException
+	 */
 	public int loadBattingStatsData(String csvFile) throws StatisticsAnalyserException, IOException {
 		try {
 			Reader reader = Files.newBufferedReader(Paths.get(csvFile));
@@ -31,6 +44,13 @@ public class StatisticsAnalyser {
 			throw new StatisticsAnalyserException(exception.getMessage(), StatisticsAnalyserException.ExceptionType.INCORRECT_FILE);
 		}
 	}
+	/**
+	 * Load Bowling Statistics
+	 * @param csvFile
+	 * @return
+	 * @throws StatisticsAnalyserException
+	 * @throws IOException
+	 */
 	public int loadBowlingStatsData(String csvFile) throws StatisticsAnalyserException, IOException {
 		try {
 			Reader reader = Files.newBufferedReader(Paths.get(csvFile));
@@ -45,107 +65,194 @@ public class StatisticsAnalyser {
 			throw new StatisticsAnalyserException(exception.getMessage(), StatisticsAnalyserException.ExceptionType.INCORRECT_FILE);
 		}
 	}
+	/**
+	 * UseCase 1
+	 * Function returns players with the best batting averages
+	 * @param <E>
+	 * @return
+	 * @throws StatisticsAnalyserException
+	 */
 	public <E>List getBestBattingAverage() throws StatisticsAnalyserException {
-		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.avg) );
-		return this.sort(battingStatsList, statComparator.reversed());
+		return this.sort(battingStatsList, battingAverageComparator.reversed());
 	}
+	/**
+	 * Usecase 2
+	 * Function returns players with the best batting strike rates
+	 * @param <E>
+	 * @return
+	 * @throws StatisticsAnalyserException
+	 */
 	public <E>List getBestStrikeRate() throws StatisticsAnalyserException {
-		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.strikeRate) );
-		return this.sort(battingStatsList, statComparator.reversed());
+		return this.sort(battingStatsList, battingStrikeRateComparator.reversed());
 	}
+	/**
+	 * Usecase 3
+	 * Function returns players with most boundaries
+	 * @param <E>
+	 * @return
+	 * @throws StatisticsAnalyserException
+	 */
 	public <E>List getMostBoundaries() throws StatisticsAnalyserException {
-		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.noOfFours + stat.noOfSixes) );
-		return this.sort(battingStatsList, statComparator.reversed());
+		Comparator<BattingCSV> comparator = Comparator.comparing(stat -> (stat.noOfFours + stat.noOfSixes) );
+		return this.sort(battingStatsList, comparator.reversed());
 	}
+	/**
+	 * Usecase 4
+	 * Function returns players with best batting strike rates with boundaries
+	 * @param <E>
+	 * @return
+	 * @throws StatisticsAnalyserException
+	 */
 	public <E>List getBestStrikeRateWithBoundaries() throws StatisticsAnalyserException {
-		battingStatsList.removeIf(s->(s.noOfFours+s.noOfSixes)==0);
+		battingStatsList.removeIf(s -> (s.noOfFours+s.noOfSixes) == 0);
 		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.bF / (stat.noOfFours + stat.noOfSixes)));
 		return this.sort(battingStatsList,  statComparator);
 	}
+	/**
+	 * Usecase 5
+	 * Function returns players with best batting averages and best strike rate
+	 * @param <E>
+	 * @return
+	 * @throws StatisticsAnalyserException
+	 */
 	public <E>List getBestAverageAndStrikeRate() throws StatisticsAnalyserException {
-		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.strikeRate) );
 		List<BattingCSV> strikeRate = getBestBattingAverage();
-		return this.sort(strikeRate.stream().limit(20).collect(Collectors.toList()), statComparator.reversed());
+		return this.sort(strikeRate.stream().limit(20).collect(Collectors.toList()), battingStrikeRateComparator.reversed());
 	}
+	/**
+	 * Usecase 6
+	 * Function returns players scoring maximum runs with best averages
+	 * @param <E>
+	 * @return
+	 * @throws StatisticsAnalyserException
+	 */
 	public <E>List getMaximumRunsWithBestAverage() throws StatisticsAnalyserException {
-		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.runs) );
-		Comparator<BattingCSV> statAvgComparator = Comparator.comparing(stat -> (stat.avg) );
-		List<BattingCSV> maximumRuns = this.sort(battingStatsList, statComparator.reversed());
-		return this.sort(maximumRuns.stream().limit(20).collect(Collectors.toList()), statAvgComparator.reversed());
+		List<BattingCSV> maximumRuns = this.sort(battingStatsList, maximumRunsComparator.reversed());
+		return this.sort(maximumRuns.stream().limit(20).collect(Collectors.toList()), battingAverageComparator.reversed());
 	}
+	/**
+	 * Usecase 7
+	 * Function returns players with the best bowling averages
+	 * @param <E>
+	 * @return
+	 * @throws StatisticsAnalyserException
+	 */
 	public <E>List getBestBowlingAverage() throws StatisticsAnalyserException {
-		Comparator<BowlingCSV> statComparator = Comparator.comparing(stat -> (stat.avg) );
 		bowlingStatsList.removeIf(stat -> stat.avg == 0);
-		return this.sort(bowlingStatsList, statComparator);
+		return this.sort(bowlingStatsList, bowlingAverageComparator);
 	}
+	/**
+	 * Usecase 8
+	 * Function returns players with the best bowling strike rates
+	 * @param <E>
+	 * @return
+	 * @throws StatisticsAnalyserException
+	 */
 	public <E>List getBestBowlingStrikeRate() throws StatisticsAnalyserException {
-		Comparator<BowlingCSV> statComparator = Comparator.comparing(stat -> (stat.strikeRate) );
 		bowlingStatsList.removeIf(stat -> stat.strikeRate == 0);
-		return this.sort(bowlingStatsList, statComparator);
+		return this.sort(bowlingStatsList, bowlingStrikeRateComparator);
 	}
+	/**
+	 * Usecase 9
+	 * Function returns players with the best economy
+	 * @param <E>
+	 * @return
+	 * @throws StatisticsAnalyserException
+	 */
 	public <E>List getBestBowlingEconomy() throws StatisticsAnalyserException {
-		Comparator<BowlingCSV> statComparator = Comparator.comparing(stat -> (stat.economy) );
+		Comparator<BowlingCSV> statComparator = Comparator.comparing(stat -> (stat.economy));
 		return this.sort(bowlingStatsList, statComparator);
 	}
+	/**
+	 * Usecase 10
+	 * Function returns players with the best strike rates and having 4 or 5 wicket hauls
+	 * @param <E>
+	 * @return
+	 * @throws StatisticsAnalyserException
+	 */
 	public <E>List getBestBowlingStrikeRateWithHauls() throws StatisticsAnalyserException {
-		Comparator<BowlingCSV> statComparator = Comparator.comparing(stat -> (stat.strikeRate) );
 		bowlingStatsList.removeIf(stat -> (stat.strikeRate == 0 || (stat.fourWkts == 0 && stat.fiveWkts == 0)));
-		return this.sort(bowlingStatsList, statComparator);
+		return this.sort(bowlingStatsList, bowlingStrikeRateComparator);
 	}
+	/**
+	 * Usecase 11
+	 * Function returns players with the best bowling averages and strike rates
+	 * @param <E>
+	 * @return
+	 * @throws StatisticsAnalyserException
+	 */
 	public <E>List getBestBowlingAverageAndStrikeRate() throws StatisticsAnalyserException {
-		Comparator<BowlingCSV> statComparator = Comparator.comparing(stat -> (stat.strikeRate) );
 		List<BowlingCSV> strikeRate = getBestBowlingAverage();
-		return this.sort(strikeRate.stream().limit(20).collect(Collectors.toList()), statComparator);
+		return this.sort(strikeRate.stream().limit(20).collect(Collectors.toList()), bowlingStrikeRateComparator);
 	}
+	/**
+	 * Usecase 12
+	 * Function returns players with maximum wickets and best averages
+	 * @param <E>
+	 * @return
+	 * @throws StatisticsAnalyserException
+	 */
 	public <E>List getMaximumWicketsWithBestAverage() throws StatisticsAnalyserException {
-		Comparator<BowlingCSV> statComparator = Comparator.comparing(stat -> (stat.wickets) );
-		Comparator<BowlingCSV> statAvgComparator = Comparator.comparing(stat -> (stat.avg) );
-		List<BowlingCSV> maximumWickets = this.sort(bowlingStatsList, statComparator.reversed());
-		return this.sort(maximumWickets.stream().limit(20).collect(Collectors.toList()), statAvgComparator);
+		List<BowlingCSV> maximumWickets = this.sort(bowlingStatsList, maximumWicketsComparator.reversed());
+		return this.sort(maximumWickets.stream().limit(20).collect(Collectors.toList()), bowlingAverageComparator);
 	}
+	/**
+	 * Usecase 13
+	 * Function returns players with the best bowling and batting averages
+	 * @param <E>
+	 * @return
+	 * @throws StatisticsAnalyserException
+	 */
 	public <E>List getBestBattingAndBowlingAverage() throws StatisticsAnalyserException {
-		List<String> stat = new ArrayList<String>();
-		List<BattingCSV> battingAverage = getBestBattingAverage();
-		battingAverage = battingAverage.stream().limit(50).collect(Collectors.toList());
-		List<BowlingCSV> bowlingAverage = getBestBowlingAverage();
-		bowlingAverage = bowlingAverage.stream().limit(50).collect(Collectors.toList());
-		for(BattingCSV b: battingAverage ) {
-			for(int i = 0;i < bowlingAverage.size(); i++) {
-				if(b.playerName.equals(bowlingAverage.get(i).playerName)) {
-					stat.add(b.playerName);
-				}
-			}
-		}
-		return stat;
+		List<BattingCSV> battingAverage = (List<BattingCSV>) getBestBattingAverage().stream().limit(50).collect(Collectors.toList());
+		List<BowlingCSV> bowlingAverage = (List<BowlingCSV>) getBestBowlingAverage().stream().limit(50).collect(Collectors.toList());
+		return getHybridPerformance(battingAverage, bowlingAverage);
 	}
+	/**
+	 * Usecase 14
+	 * Function returns players with best allround performance i.e runs + wickets
+	 * @param <E>
+	 * @return
+	 * @throws StatisticsAnalyserException
+	 */
 	public <E>List getAllRounder() throws StatisticsAnalyserException {
+		List<BattingCSV> runs = (List<BattingCSV>) this.sort(battingStatsList, maximumRunsComparator).stream().limit(50).collect(Collectors.toList());
+		List<BowlingCSV> wickets = (List<BowlingCSV>) this.sort(bowlingStatsList, maximumWicketsComparator).stream().limit(50).collect(Collectors.toList());
+		return getHybridPerformance(runs, wickets);
+	}
+	private List<String> getHybridPerformance(List<BattingCSV> bat, List<BowlingCSV> bowl) {
 		List<String> stats = new ArrayList<String>();
-		Comparator<BowlingCSV> statBowlComparator = Comparator.comparing(stat -> (stat.wickets));
-		Comparator<BattingCSV> statBatComparator = Comparator.comparing(stat -> (stat.runs));
-		List<BattingCSV> battingAverage = this.sort(battingStatsList, statBatComparator);
-		battingAverage = battingAverage.stream().limit(50).collect(Collectors.toList());
-		List<BowlingCSV> bowlingAverage = this.sort(bowlingStatsList, statBowlComparator);
-		bowlingAverage = bowlingAverage.stream().limit(50).collect(Collectors.toList());
-		for(BattingCSV b: battingAverage ) {
-			for(int i = 0;i < bowlingAverage.size(); i++) {
-				if(b.playerName.equals(bowlingAverage.get(i).playerName)) {
+		for(BattingCSV b: bat ) {
+			for(int i = 0;i < bowl.size(); i++) {
+				if(b.playerName.equals(bowl.get(i).playerName)) {
 					stats.add(b.playerName);
 				}
 			}
 		}
 		return stats;
 	}
+	/**
+	 * Function returns players with maximum hundreds and having best averages
+	 * @param <E>
+	 * @return
+	 * @throws StatisticsAnalyserException
+	 */
 	public <E>List getMaximumHundredsWithBestAverage() throws StatisticsAnalyserException {
 		battingStatsList.removeIf(stat -> stat.noOfHundreds==0);
 		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.noOfHundreds) );
-		Comparator<BattingCSV> statAvgComparator = Comparator.comparing(stat -> (stat.avg) );
 		List<BattingCSV> maximumHundreds = this.sort(battingStatsList, statComparator.reversed());
-		return this.sort(maximumHundreds, statAvgComparator.reversed());
+		return this.sort(maximumHundreds, battingAverageComparator.reversed());
 	}
+	/**
+	 * Usecase 16
+	 * Function returns players with the best batting averages without scoring a fifty/hundred
+	 * @param <E>
+	 * @return
+	 * @throws StatisticsAnalyserException
+	 */
 	public <E>List getBestAverageWithoutHundredsOrFifties() throws StatisticsAnalyserException {
 		battingStatsList.removeIf(stat -> (stat.noOfHundreds !=0 || stat.noOfFifties != 0));
-		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.avg) );
-		return this.sort(battingStatsList, statComparator.reversed());
+		return this.sort(battingStatsList, battingAverageComparator.reversed());
 	}
 	private <E> List sort(List<E> statList, Comparator<E> statComparator) throws StatisticsAnalyserException {
 		if(statList == null || statList.size() == 0) {
