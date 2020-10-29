@@ -22,7 +22,7 @@ public class StatisticsAnalyser {
 	private static final Comparator<BattingCSV> battingStrikeRateComparator = Comparator.comparing(stat -> (stat.strikeRate));
 	private static final Comparator<BowlingCSV> bowlingStrikeRateComparator = Comparator.comparing(stat -> (stat.strikeRate));
 	private static final Comparator<BattingCSV> maximumRunsComparator = Comparator.comparing(stat -> (stat.runs));
-	private static final Comparator<BowlingCSV> maximumWicketsComparator = Comparator.comparing(stat -> (stat.wickets) );
+	private static final Comparator<BowlingCSV> maximumWicketsComparator = Comparator.comparing(stat -> (stat.wickets));
 	/**
 	 * Load Batting Statistics
 	 * @param csvFile
@@ -55,7 +55,7 @@ public class StatisticsAnalyser {
 		try {
 			Reader reader = Files.newBufferedReader(Paths.get(csvFile));
 			ICSVBuilder<BowlingCSV> csvBuilder = CSVBuilderFactory.createCSVBuilder();
-		    bowlingStatsList = csvBuilder.getCSVFileList(reader, BowlingCSV.class);
+			bowlingStatsList = csvBuilder.getCSVFileList(reader, BowlingCSV.class);
 			return bowlingStatsList.size();
 		} 
 		catch(CSVBuilderException exception) {
@@ -72,7 +72,7 @@ public class StatisticsAnalyser {
 	 * @return
 	 * @throws StatisticsAnalyserException
 	 */
-	public <E>List getBestBattingAverage() throws StatisticsAnalyserException {
+	public <E> List getBestBattingAverage() throws StatisticsAnalyserException {
 		return this.sort(battingStatsList, battingAverageComparator.reversed());
 	}
 	/**
@@ -82,7 +82,7 @@ public class StatisticsAnalyser {
 	 * @return
 	 * @throws StatisticsAnalyserException
 	 */
-	public <E>List getBestStrikeRate() throws StatisticsAnalyserException {
+	public <E> List getBestStrikeRate() throws StatisticsAnalyserException {
 		return this.sort(battingStatsList, battingStrikeRateComparator.reversed());
 	}
 	/**
@@ -92,7 +92,7 @@ public class StatisticsAnalyser {
 	 * @return
 	 * @throws StatisticsAnalyserException
 	 */
-	public <E>List getMostBoundaries() throws StatisticsAnalyserException {
+	public <E> List getMostBoundaries() throws StatisticsAnalyserException {
 		Comparator<BattingCSV> comparator = Comparator.comparing(stat -> (stat.noOfFours + stat.noOfSixes) );
 		return this.sort(battingStatsList, comparator.reversed());
 	}
@@ -103,7 +103,7 @@ public class StatisticsAnalyser {
 	 * @return
 	 * @throws StatisticsAnalyserException
 	 */
-	public <E>List getBestStrikeRateWithBoundaries() throws StatisticsAnalyserException {
+	public <E> List getBestStrikeRateWithBoundaries() throws StatisticsAnalyserException {
 		battingStatsList.removeIf(s -> (s.noOfFours+s.noOfSixes) == 0);
 		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.bF / (stat.noOfFours + stat.noOfSixes)));
 		return this.sort(battingStatsList,  statComparator);
@@ -115,7 +115,7 @@ public class StatisticsAnalyser {
 	 * @return
 	 * @throws StatisticsAnalyserException
 	 */
-	public <E>List getBestAverageAndStrikeRate() throws StatisticsAnalyserException {
+	public <E> List getBestAverageAndStrikeRate() throws StatisticsAnalyserException {
 		List<BattingCSV> strikeRate = getBestBattingAverage();
 		return this.sort(strikeRate.stream().limit(20).collect(Collectors.toList()), battingStrikeRateComparator.reversed());
 	}
@@ -126,7 +126,7 @@ public class StatisticsAnalyser {
 	 * @return
 	 * @throws StatisticsAnalyserException
 	 */
-	public <E>List getMaximumRunsWithBestAverage() throws StatisticsAnalyserException {
+	public <E> List getMaximumRunsWithBestAverage() throws StatisticsAnalyserException {
 		List<BattingCSV> maximumRuns = this.sort(battingStatsList, maximumRunsComparator.reversed());
 		return this.sort(maximumRuns.stream().limit(20).collect(Collectors.toList()), battingAverageComparator.reversed());
 	}
@@ -137,7 +137,7 @@ public class StatisticsAnalyser {
 	 * @return
 	 * @throws StatisticsAnalyserException
 	 */
-	public <E>List getBestBowlingAverage() throws StatisticsAnalyserException {
+	public <E> List getBestBowlingAverage() throws StatisticsAnalyserException {
 		bowlingStatsList.removeIf(stat -> stat.avg == 0);
 		return this.sort(bowlingStatsList, bowlingAverageComparator);
 	}
@@ -148,7 +148,7 @@ public class StatisticsAnalyser {
 	 * @return
 	 * @throws StatisticsAnalyserException
 	 */
-	public <E>List getBestBowlingStrikeRate() throws StatisticsAnalyserException {
+	public <E> List getBestBowlingStrikeRate() throws StatisticsAnalyserException {
 		bowlingStatsList.removeIf(stat -> stat.strikeRate == 0);
 		return this.sort(bowlingStatsList, bowlingStrikeRateComparator);
 	}
@@ -159,7 +159,7 @@ public class StatisticsAnalyser {
 	 * @return
 	 * @throws StatisticsAnalyserException
 	 */
-	public <E>List getBestBowlingEconomy() throws StatisticsAnalyserException {
+	public <E> List getBestBowlingEconomy() throws StatisticsAnalyserException {
 		Comparator<BowlingCSV> statComparator = Comparator.comparing(stat -> (stat.economy));
 		return this.sort(bowlingStatsList, statComparator);
 	}
@@ -170,7 +170,7 @@ public class StatisticsAnalyser {
 	 * @return
 	 * @throws StatisticsAnalyserException
 	 */
-	public <E>List getBestBowlingStrikeRateWithHauls() throws StatisticsAnalyserException {
+	public <E> List getBestBowlingStrikeRateWithHauls() throws StatisticsAnalyserException {
 		bowlingStatsList.removeIf(stat -> (stat.strikeRate == 0 || (stat.fourWkts == 0 && stat.fiveWkts == 0)));
 		return this.sort(bowlingStatsList, bowlingStrikeRateComparator);
 	}
@@ -181,7 +181,7 @@ public class StatisticsAnalyser {
 	 * @return
 	 * @throws StatisticsAnalyserException
 	 */
-	public <E>List getBestBowlingAverageAndStrikeRate() throws StatisticsAnalyserException {
+	public <E> List getBestBowlingAverageAndStrikeRate() throws StatisticsAnalyserException {
 		List<BowlingCSV> strikeRate = getBestBowlingAverage();
 		return this.sort(strikeRate.stream().limit(20).collect(Collectors.toList()), bowlingStrikeRateComparator);
 	}
@@ -192,7 +192,7 @@ public class StatisticsAnalyser {
 	 * @return
 	 * @throws StatisticsAnalyserException
 	 */
-	public <E>List getMaximumWicketsWithBestAverage() throws StatisticsAnalyserException {
+	public <E> List getMaximumWicketsWithBestAverage() throws StatisticsAnalyserException {
 		List<BowlingCSV> maximumWickets = this.sort(bowlingStatsList, maximumWicketsComparator.reversed());
 		return this.sort(maximumWickets.stream().limit(20).collect(Collectors.toList()), bowlingAverageComparator);
 	}
@@ -203,7 +203,7 @@ public class StatisticsAnalyser {
 	 * @return
 	 * @throws StatisticsAnalyserException
 	 */
-	public <E>List getBestBattingAndBowlingAverage() throws StatisticsAnalyserException {
+	public <E> List getBestBattingAndBowlingAverage() throws StatisticsAnalyserException {
 		List<BattingCSV> battingAverage = (List<BattingCSV>) getBestBattingAverage().stream().limit(50).collect(Collectors.toList());
 		List<BowlingCSV> bowlingAverage = (List<BowlingCSV>) getBestBowlingAverage().stream().limit(50).collect(Collectors.toList());
 		return getHybridPerformance(battingAverage, bowlingAverage);
@@ -215,12 +215,12 @@ public class StatisticsAnalyser {
 	 * @return
 	 * @throws StatisticsAnalyserException
 	 */
-	public <E>List getAllRounder() throws StatisticsAnalyserException {
+	public <E> List getAllRounder() throws StatisticsAnalyserException {
 		List<BattingCSV> runs = (List<BattingCSV>) this.sort(battingStatsList, maximumRunsComparator).stream().limit(50).collect(Collectors.toList());
 		List<BowlingCSV> wickets = (List<BowlingCSV>) this.sort(bowlingStatsList, maximumWicketsComparator).stream().limit(50).collect(Collectors.toList());
 		return getHybridPerformance(runs, wickets);
 	}
-	private List<String> getHybridPerformance(List<BattingCSV> bat, List<BowlingCSV> bowl) {
+	private List <String> getHybridPerformance(List<BattingCSV> bat, List<BowlingCSV> bowl) {
 		List<String> stats = new ArrayList<String>();
 		for(BattingCSV b: bat ) {
 			for(int i = 0;i < bowl.size(); i++) {
@@ -237,7 +237,7 @@ public class StatisticsAnalyser {
 	 * @return
 	 * @throws StatisticsAnalyserException
 	 */
-	public <E>List getMaximumHundredsWithBestAverage() throws StatisticsAnalyserException {
+	public <E> List getMaximumHundredsWithBestAverage() throws StatisticsAnalyserException {
 		battingStatsList.removeIf(stat -> stat.noOfHundreds==0);
 		Comparator<BattingCSV> statComparator = Comparator.comparing(stat -> (stat.noOfHundreds) );
 		List<BattingCSV> maximumHundreds = this.sort(battingStatsList, statComparator.reversed());
@@ -250,7 +250,7 @@ public class StatisticsAnalyser {
 	 * @return
 	 * @throws StatisticsAnalyserException
 	 */
-	public <E>List getBestAverageWithoutHundredsOrFifties() throws StatisticsAnalyserException {
+	public <E> List getBestAverageWithoutHundredsOrFifties() throws StatisticsAnalyserException {
 		battingStatsList.removeIf(stat -> (stat.noOfHundreds !=0 || stat.noOfFifties != 0));
 		return this.sort(battingStatsList, battingAverageComparator.reversed());
 	}
@@ -258,13 +258,13 @@ public class StatisticsAnalyser {
 		if(statList == null || statList.size() == 0) {
 			throw new StatisticsAnalyserException("No Census Data", StatisticsAnalyserException.ExceptionType.NO_STATISTICS_DATA);
 		}
-		for (int i = 0; i < statList.size(); i++) {
-			for (int j = 0; j < statList.size() - i - 1; j++) {
-				E stat1 =  statList.get(j);
-				E stat2 =  statList.get(j + 1);
+		for (int iteration = 0; iteration < statList.size(); iteration++) {
+			for (int innerIteration = 0; innerIteration < statList.size() - iteration - 1; innerIteration++) {
+				E stat1 =  statList.get(innerIteration);
+				E stat2 =  statList.get(innerIteration + 1);
 				if (statComparator.compare(stat1, stat2) > 0) {
-					statList.set(j, stat2);
-					statList.set(j + 1, stat1);
+					statList.set(innerIteration, stat2);
+					statList.set(innerIteration + 1, stat1);
 				}
 			}
 		}
